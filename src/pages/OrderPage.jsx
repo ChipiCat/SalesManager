@@ -1,6 +1,11 @@
 import React from "react";
 import { getAllOrders } from "../services/orderService";
 import { useState,useEffect } from "react";
+import { NavbarComponent } from "../components/NavBarComponent";
+import "../styles/global.css";
+import "../styles/OrderPage.css";
+import LateralNav from "../components/lateralNav";
+
 const OrderPage = () => {
 
     const [orders, setOrders] = useState("");
@@ -18,9 +23,11 @@ const OrderPage = () => {
 
     console.log(orders);
     return (
-        <div>
-            <h2>Listado de Órdenes</h2>
-         
+        <div className="page">
+            <NavbarComponent/>
+            <div className="body-page">
+                <LateralNav/>
+            </div>
         </div>
     );
 };
