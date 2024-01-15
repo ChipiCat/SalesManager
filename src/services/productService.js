@@ -1,5 +1,5 @@
 import {firestore} from './firebase-config';
-import { collection, getDocs, getDoc , doc} from "firebase/firestore"; 
+import { collection, getDocs, getDoc , doc, addDoc} from "firebase/firestore"; 
 
 const productsCollection = collection(firestore, 'Producto');
 
@@ -34,4 +34,14 @@ const getAllProducts = async () => {
     }
 };
 
-export {getProductById, getAllProducts};
+const saveDataProduct = async (product) => {
+  try {
+    const docRef = await addDoc(productsCollection, product);
+    console.log("Product written with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding product: ", error);
+    throw error;
+  }
+}
+
+export {getProductById, getAllProducts, saveDataProduct};
