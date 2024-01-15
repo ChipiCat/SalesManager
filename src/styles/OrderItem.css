@@ -1,0 +1,11 @@
+.order-text-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.order-text-item h6{
+    width: 100%;
+}
