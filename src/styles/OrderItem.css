@@ -8,4 +8,9 @@
 
 .order-text-item h6{
     width: 100%;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.17px;
 }
