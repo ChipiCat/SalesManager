@@ -40,7 +40,7 @@ const OrderPage = () => {
                         <div className="head-content-tab">
                           <h2>Total Pedidos</h2>
                         </div>
-                        <OrderList/>  
+                        <OrderList/>
                    </div>
                   )}
                 </div>

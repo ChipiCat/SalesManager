@@ -1,8 +1,7 @@
 import {firestore} from './firebase-config';
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc} from "firebase/firestore"; 
 
 const ordersCollection = collection(firestore, 'Orders');
-const ITEMS_PER_PAGE = 10;
 
 const getAllOrders = async () => {
     try {
@@ -15,6 +14,40 @@ const getAllOrders = async () => {
     }
 };
 
+const order = {
+  clientName: 'Lou Juasd',
+  date: '2021-10-10',
+  idUserSeller: 'oUrTfLjw65lIYvj3q6q7',
+  pendingPrice: 1000,
+  place: 'Casa',
+  state: 'Pendiente',
+  totalPrice: 1000,
+  ProductList: [
+    {
+      idProduct: 'RbJxQUHgiAx9uvVFGrnr',
+      quantity: 1,
+      state: 'Pendiente',
+    },
+    {
+      idProduct: 'RbJxQUHgiAx9uvVFGrnr',
+      quantity: 123,
+      state: 'Cancelado',
+    }
+  ]};
+
+
+const uploadOrder = async (order) => {
+  try {
+    const docRef = await addDoc(ordersCollection, order);
+    console.log("Order written with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding order: ", error);
+    throw error;
+  }
+}
+
+
+
 
 const getNumberOfOrders = async () => {
   try {
@@ -26,17 +59,35 @@ const getNumberOfOrders = async () => {
   }
 };
 
+const getPage = async (indexStart, indexFinish, idPrev) => {
+  const idString = idPrev.replace(/\s/g, '');
 
-const getNextPage = async (lastVisibleOrder) => {
+  console.log('idPrev: ', idString);
   try {
-    const snapshot = await getDocs(query(ordersCollection, orderBy('timestamp', 'desc'), startAfter(lastVisibleOrder), limit(ITEMS_PER_PAGE)));
+    // Obtén una referencia a la colección ordenada por algún campo (por ejemplo, por ID).
+    let q = query(ordersCollection, orderBy('date'));
+
+    // Establece el límite para obtener solo la cantidad necesaria de elementos.
+    
+
+    // Si no es la primera página, establece el punto de inicio.
+    if (indexStart > 0) {
+      const startAfterDoc = await getDoc(doc(ordersCollection, idString));
+      q = query(q, startAfter(startAfterDoc));
+    }
+
+    q = query(q, limit(indexFinish - indexStart));
+
+
+    const snapshot = await getDocs(q);
     const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    return { orders, lastVisible };
+    return orders;
   } catch (error) {
-    console.error('Error getting next page: ', error);
+    console.error('Error fetching orders:', error);
     throw error;
   }
 };
 
-export { getAllOrders, getNextPage, getNumberOfOrders };
+
+
+export { getAllOrders, getPage, getNumberOfOrders, uploadOrder };

@@ -17,9 +17,6 @@ const TableOrderDetail = (props) => {
     const totalPrice = props.totalPrice;
     const pendingPrice = props.pendingPrice;
     const [products, setProducts] = useState({});
-    console.log(productList[0].idProduct, "productList ---- wiiiu");
-
-    const [productU, setProduct] = useState({});
 
     useEffect(() => {
         const fetchProductNames = async () => {
