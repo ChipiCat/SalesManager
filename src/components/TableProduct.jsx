@@ -26,8 +26,13 @@ const TableProduct = (props) => {
     setEditDialogOpen(true);
   };
 
-  const handleDelete = (productId) => {
-    console.log(`Eliminar producto con ID: ${productId}`);
+  const handleDelete = async (productId) => {
+    try {
+      await deleteProduct(productId);
+      console.log(`Producto con ID ${productId} eliminado correctamente.`);
+    } catch (error) {
+      console.error("Error al eliminar el producto: ", error);
+    }
   };
 
   const handleCloseEditDialog = () => {
@@ -78,21 +83,9 @@ const TableProduct = (props) => {
         <DialogContent>
           {selectedProduct && (
             <form className="form-product">
-              <TextField fullWidth variant="standard" label="Nombre" value={selectedProduct.name}/>
-              <TextField
-                fullWidth
-                type="number"
-                variant="standard"
-                label="Precio"
-                value={selectedProduct.price}
-              />
-              <TextField
-                fullWidth
-                type="number"
-                variant="standard"
-                label="Cantidad"
-                value={selectedProduct.stock}
-              />
+              <TextField fullWidth variant="standard" label="Nombre" value={selectedProduct.name} />
+              <TextField fullWidth type="number" variant="standard" label="Precio" value={selectedProduct.price} />
+              <TextField fullWidth type="number" variant="standard" label="Cantidad" value={selectedProduct.stock} />
               <div className="buttons-form">
                 <Button variant="outlined" onClick={handleCloseEditDialog}>
                   Cancelar

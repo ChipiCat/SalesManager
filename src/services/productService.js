@@ -1,5 +1,6 @@
 import {firestore} from './firebase-config';
 import { collection, getDocs, getDoc , doc, addDoc} from "firebase/firestore"; 
+import { deleteDoc, doc } from "firebase/firestore";
 
 const productsCollection = collection(firestore, 'Producto');
 
@@ -61,4 +62,15 @@ const updateProduct = async (productId, updatedProduct) => {
   }
 }
 
-export {getProductById, getAllProducts, saveDataProduct, updateProduct};
+const deleteProduct = async (productId) => {
+  try {
+    const productRef = doc(firestore, 'Producto', productId);
+    await deleteDoc(productRef);
+    console.log(`Producto con ID ${productId} eliminado correctamente.`);
+  } catch (error) {
+    console.error("Error al eliminar el producto: ", error);
+    throw error;
+  }
+};
+
+export {getProductById, getAllProducts, saveDataProduct, updateProduct, deleteProduct};
