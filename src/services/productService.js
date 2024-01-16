@@ -44,4 +44,21 @@ const saveDataProduct = async (product) => {
   }
 }
 
-export {getProductById, getAllProducts, saveDataProduct};
+const updateProduct = async (productId, updatedProduct) => {
+  try {
+    const productRef = doc(firestore, 'Producto', productId);
+    const productSnap = await getDoc(productRef);
+
+    if (productSnap.exists()) {
+      await updateDoc(productRef, updatedProduct);
+      console.log(`Product with ID ${productId} updated successfully`);
+    } else {
+      console.log('No such product!');
+    }
+  } catch (error) {
+    console.error("Error updating product: ", error);
+    throw error;
+  }
+}
+
+export {getProductById, getAllProducts, saveDataProduct, updateProduct};
