@@ -5,9 +5,10 @@ import { NavbarComponent } from "../components/NavBarComponent";
 import "../styles/global.css";
 import "../styles/OrderPage.css";
 import LateralNav from "../components/lateralNav";
-import { Tabs, Tab, Button } from "@mui/material";
+import { Tabs, Tab, Button, Dialog, DialogContent } from "@mui/material";
 
 import OrderList from "../components/OrderList";
+import FormOrder from "../components/FormOrder";
 
 const OrderPage = () => {
 
@@ -15,6 +16,8 @@ const OrderPage = () => {
     const handleChangeTab = (event, newValue) => {
         setValueTab(newValue);
     }
+
+    const [openForm, setOpenForm] = useState(false);
 
     return (
         <div className="page">
@@ -31,8 +34,10 @@ const OrderPage = () => {
                     <div className="content-tab">
                        <div className="head-content-tab">
                           <h2>Mis Pedidos</h2>
-                          <Button variant="contained" color="primary">Nuevo Pedido</Button>
-                        </div>
+                          <Button onClick={() => setOpenForm(true)} variant="contained" color="primary">Nuevo Pedido</Button>
+                       </div>
+
+                       <FormOrder openForm={openForm} setOpenForm={setOpenForm}/>  
                     </div>
                   )}
                   {valueTab === 1 && (

@@ -1,0 +1,87 @@
+@import url("../styles/global.css");
+
+  
+.title-section-add-product {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+
+.product-item-list{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+    
+    
+}
+
+.product-item-list h6{
+    width: 100%;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.17px;
+}
+
+
+.detail-item{
+    text-align: right;
+}
+
+.detail-item-center{
+    text-align: center;
+}
+
+.add-button-item{
+    width: 70px;
+   
+    height: 100%;
+}
+
+.buttons-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.product-item-list .relative{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+}
+
+.relative .block{
+    width: 50px;
+} 
+
+.total-price-text{
+    width: 100%;
+    text-align: left;
+}
+
+.space{
+    width: 100px;
+   
+}
+
+.space h6{
+    width: 100%;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.17px;
+}
+
