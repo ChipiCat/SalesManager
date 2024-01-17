@@ -1,5 +1,6 @@
 import {firestore} from './firebase-config';
 import { collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc} from "firebase/firestore"; 
+import { decrementStock } from './productService';
 
 const ordersCollection = collection(firestore, 'Orders');
 
@@ -39,6 +40,9 @@ const order = {
 const uploadOrder = async (order) => {
   try {
     const docRef = await addDoc(ordersCollection, order);
+    order.ProductList.forEach(async (product) => {
+      decrementStock(product.idProduct, product.quantity);
+    });
     console.log("Order written with ID: ", docRef.id);
   } catch (error) {
     console.error("Error adding order: ", error);

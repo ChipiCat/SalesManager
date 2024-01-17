@@ -97,6 +97,11 @@ small{
     text-transform: none;
 }
 
+.error-message{
+    margin-top: 5px;
+    color: red;
+}
+
 .container{
     padding-right: 100px;
     padding-left: 100px;
@@ -123,3 +128,4 @@ small{
     }   
     
 }
+
