@@ -85,4 +85,16 @@ const updateProduct = async (productId, updatedProduct) => {
   }
 }
 
-export {getProductById, getAllProducts, saveDataProduct, updateProduct, decrementStock, verifyStockAvailable};
+const deleteProduct = async (productId) => {
+  try {
+    const productRef = doc(firestore, 'Producto', productId);
+    await deleteDoc(productRef);
+    console.log(`Producto con ID ${productId} eliminado correctamente.`);
+  } catch (error) {
+    console.error("Error al eliminar el producto: ", error);
+    throw error;
+  }
+};
+
+
+export {getProductById, getAllProducts, saveDataProduct, updateProduct, decrementStock, verifyStockAvailable, deleteProduct};

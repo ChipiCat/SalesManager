@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,11 +13,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { TextField, Button } from "@mui/material";
+import { deleteProduct, getAllProducts } from "../services/productService"; 
 import "../styles/global.css";
 import "../styles/InventaryPage.css";
 
 const TableProduct = (props) => {
-  const productList = props.productList;
+  const [productList, setProductList] = useState(props.productList);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -26,10 +27,24 @@ const TableProduct = (props) => {
     setEditDialogOpen(true);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const data = await getAllProducts();
+      setProductList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleDelete = async (productId) => {
     try {
       await deleteProduct(productId);
       console.log(`Producto con ID ${productId} eliminado correctamente.`);
+      fetchData();
     } catch (error) {
       console.error("Error al eliminar el producto: ", error);
     }
