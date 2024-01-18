@@ -6,13 +6,17 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TableOrderDetail from "./TableOrderDetail";
+import { MdDelete } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
 
 import "../styles/OrderItem.css";
 import "../styles/global.css";
 import { getUserById } from "../services/userService";
+import { IconButton } from "@mui/material";
 
 const OrderItem = (props) => {
-    
+    const orderId = props.idOrder;
+    const displayEditButtons = props.displayEditButtons;
     const [state, setState] = useState(props.state);
     const [date, setDate] = useState(props.date);
     const [clientName, setClientName] = useState(props.clientName);
@@ -52,6 +56,14 @@ const OrderItem = (props) => {
                         <h6>{clientName}</h6>
                         <h6>{place}</h6>
                         <h6>{user.name}</h6>
+                        {displayEditButtons?(<div className="buttons-edit-container">
+                            <IconButton className="icon-button">
+                                <MdDelete />
+                            </IconButton>
+                            <IconButton className="icon-button">
+                                <TbEdit />
+                            </IconButton>
+                        </div>):(<></>)}
                     </div>
                 </AccordionSummary>
                 <AccordionDetails>

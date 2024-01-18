@@ -1,33 +1,50 @@
 import React from "react";
 import "../styles/global.css";
 import "../styles/OrderList.css";
-import { getAllOrders, getNumberOfOrders, getPage } from "../services/orderService";
+import { getAllOrders, getNumberOfOrders, getNumberOfOrdersByUser, getPage, getPageByUser } from "../services/orderService";
 import { useState, useEffect } from "react";
 import OrderItem from "./OrderItem";
 import { Pagination, Stack } from "@mui/material";
+import { useSelector } from "react-redux";
 
-const OrderList = () => {
+const OrderList = (props) => {
+    const filterByUser = props.filterByUser;
     const [orders, setOrders] = useState([]);
     let numberOrders = 0;
     const itemsPerPage = 10;
     const [numberPages, setNumberPages] = useState(0);
     const [lastIdInPage, setLastIdInPage] = useState("example");
+    
+    let globalIdUser = useSelector((state) => state.user.idUser);
+
     useEffect(() => {
         const fetchData = async () => {
             try{
-
                 let data;
-
-                numberOrders = await getNumberOfOrders();
+                if(filterByUser){
+                    console.log(globalIdUser, " FILTERRING BY USER ----Id");
+                    numberOrders = await getNumberOfOrdersByUser(globalIdUser);
+                }else{
+                    numberOrders = await getNumberOfOrders();
+                }
+            
                 setNumberPages(Math.ceil(numberOrders/10));
                 console.log(numberPages, "orders --- juas");
 
                 if(numberOrders < 10){
-                    data = await getPage(0, numberOrders-1,"null-first");
+                    if(filterByUser){
+                        data = await getPageByUser(0, numberOrders,"null-first", globalIdUser);
+                    }else{
+                        data = await getPage(0, numberOrders,"null-first");
+                    }
                 }else{
-                    data = await getPage(0, 10,"null-first");
+                    if(filterByUser){
+                        data = await getPageByUser(0, 10,"null-first", globalIdUser);
+                    }else{
+                        data = await getPage(0, 10,"null-first");
+                
+                    }
                 }
-
                 setOrders(data);
                 setLastIdInPage(() => data?.[data.length-1]?.id);
                 
@@ -37,7 +54,8 @@ const OrderList = () => {
             }
         };
         fetchData();
-    }, []);
+
+    }, [globalIdUser]);     
 
     console.log(orders.length, "orders leeeeenght --- juas");
     
@@ -45,7 +63,13 @@ const OrderList = () => {
         let initIndex = (value-1)*10;
         let endIndex = value*10;
         const fetchData = async () => {
-            const data = await getPage(initIndex, endIndex,lastIdInPage);
+            let data;
+            if(filterByUser){
+                data = await getPageByUser(initIndex, endIndex,lastIdInPage, globalIdUser);
+            }else{
+                data = await getPage(initIndex, endIndex,lastIdInPage);
+            }
+            
             setOrders(data);
             setLastIdInPage(() => data?.[data.length-1]?.id);
         }
@@ -60,6 +84,8 @@ const OrderList = () => {
             {orders.map((order) => (
                 <OrderItem 
                 key={order.id}
+                displayEditButtons={filterByUser}
+                orderId={order.id}
                 state={order.state} 
                 date={order.date} 
                 clientName={order.clientName}

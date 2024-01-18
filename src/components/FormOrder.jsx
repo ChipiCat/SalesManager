@@ -9,7 +9,7 @@ import { getAllProducts, verifyStockAvailable } from "../services/productService
 import { NumberInput } from "keep-react";
 import { validateInputNumber, validateText } from "../utils/Validator";
 import { uploadOrder } from "../services/orderService";
-
+import { useSelector } from "react-redux";
 
 
 
@@ -29,6 +29,10 @@ const FormOrder = ({openForm, setOpenForm}) => {
     const [quantityCurrentProduct, setQuantityCurrentProduct] = useState(0);
     const [errorMessage, setErrorMessage] = useState("");
     const [errorQuantityMessage, setErrorQuantityMessage] = useState("");
+
+    const [idUser, setIdUser] = useState("");
+
+    const globalIdUser = useSelector((state) => state.user.idUser);
 
     const fetchData = async () => {
         const data = await getAllProducts();
@@ -123,7 +127,7 @@ const FormOrder = ({openForm, setOpenForm}) => {
             const order = {
                 clientName: nameCient,
                 date: new Date(),
-                idUserSeller: 'oUrTfLjw65lIYvj3q6q7',
+                idUserSeller: idUser,
                 pendingPrice: totalPrice,
                 place: place,
                 state: 'Pendiente',
@@ -165,6 +169,10 @@ const FormOrder = ({openForm, setOpenForm}) => {
            
             fetchData();
         }, []);
+
+    useEffect(() => {
+        setIdUser(globalIdUser);
+    }, [globalIdUser]);
 
     return <>
         <Dialog open={openForm} fullWidth={true}>

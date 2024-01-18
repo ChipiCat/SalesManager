@@ -1,5 +1,5 @@
 import {firestore} from './firebase-config';
-import { collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc} from "firebase/firestore"; 
+import { collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc, where, deleteDoc} from "firebase/firestore"; 
 import { decrementStock } from './productService';
 
 const ordersCollection = collection(firestore, 'Orders');
@@ -63,25 +63,47 @@ const getNumberOfOrders = async () => {
   }
 };
 
-const getPage = async (indexStart, indexFinish, idPrev) => {
+const getNumberOfOrdersByUser = async (idUser) => {
+  try {
+    const q = query(ordersCollection, where("idUserSeller", "==", idUser));
+    const snapshot = await getDocs(q);
+    return snapshot.size;
+  } catch (error) {
+    console.error("Error fetching orders: ", error);
+    throw error;
+  }
+}
+
+const getPageByUser = async (indexStart, indexFinish, idPrev, idUser) => {
   const idString = idPrev.replace(/\s/g, '');
 
   console.log('idPrev: ', idString);
   try {
-    // Obtén una referencia a la colección ordenada por algún campo (por ejemplo, por ID).
-    let q = query(ordersCollection, orderBy('date'));
-
-    // Establece el límite para obtener solo la cantidad necesaria de elementos.
-    
-
-    // Si no es la primera página, establece el punto de inicio.
+    let q = query(ordersCollection, where("idUserSeller", "==", idUser), orderBy('date'));
     if (indexStart > 0) {
       const startAfterDoc = await getDoc(doc(ordersCollection, idString));
       q = query(q, startAfter(startAfterDoc));
     }
-
     q = query(q, limit(indexFinish - indexStart));
 
+    const snapshot = await getDocs(q);
+    const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return orders;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }
+}
+
+const getPage = async (indexStart, indexFinish, idPrev) => {
+  const idString = idPrev.replace(/\s/g, '');
+  try {
+    let q = query(ordersCollection, orderBy('date'));
+    if (indexStart > 0) {
+      const startAfterDoc = await getDoc(doc(ordersCollection, idString));
+      q = query(q, startAfter(startAfterDoc));
+    }
+    q = query(q, limit(indexFinish - indexStart));
 
     const snapshot = await getDocs(q);
     const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -92,6 +114,30 @@ const getPage = async (indexStart, indexFinish, idPrev) => {
   }
 };
 
+const deleteAllOrders = async () => {
+  try {
+    const snapshot = await getDocs(ordersCollection);
+    snapshot.docs.forEach(async (doc) => {
+      await deleteOrder(doc.id);
+    });
+  } catch (error) {
+    console.error("Error fetching orders: ", error);
+    throw error;
+  }
+}
 
 
-export { getAllOrders, getPage, getNumberOfOrders, uploadOrder };
+
+const deleteOrder = async (id) => {
+  try {
+    await deleteDoc(doc(ordersCollection, id));
+  } catch (error) {
+    console.error("Error deleting order: ", error);
+    throw error;
+  }
+}
+
+
+
+export { getAllOrders, getPage, getNumberOfOrders, uploadOrder
+  , getPageByUser, getNumberOfOrdersByUser, deleteAllOrders, deleteOrder};

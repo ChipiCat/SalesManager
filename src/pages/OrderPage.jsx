@@ -6,18 +6,25 @@ import "../styles/global.css";
 import "../styles/OrderPage.css";
 import LateralNav from "../components/lateralNav";
 import { Tabs, Tab, Button, Dialog, DialogContent } from "@mui/material";
+import {useSelector} from "react-redux";
 
 import OrderList from "../components/OrderList";
 import FormOrder from "../components/FormOrder";
 
 const OrderPage = () => {
-
+    const [idUser, setIdUser] = useState("");
     const [valueTab, setValueTab] = useState(0);
     const handleChangeTab = (event, newValue) => {
         setValueTab(newValue);
     }
 
+    const globalIdUser = useSelector((state) => state.user.idUser);
+
     const [openForm, setOpenForm] = useState(false);
+
+    useEffect(() => {
+        setIdUser(globalIdUser);
+    }, [globalIdUser]);
 
     return (
         <div className="page">
@@ -36,14 +43,14 @@ const OrderPage = () => {
                           <h2>Mis Pedidos</h2>
                           <Button onClick={() => setOpenForm(true)} variant="contained" color="primary">Nuevo Pedido</Button>
                        </div>
-
                        <FormOrder openForm={openForm} setOpenForm={setOpenForm}/>  
+                        <OrderList filterByUser={true}/>
                     </div>
                   )}
                   {valueTab === 1 && (
                      <div className="content-tab">
                         <div className="head-content-tab">
-                          <h2>Total Pedidos</h2>
+                            <h2>Total Pedidos</h2>
                         </div>
                         <OrderList/>
                    </div>

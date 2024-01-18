@@ -14,13 +14,22 @@ const getUserById = async (id) => {
         if (userSnap.exists()) {
           return { id: userSnap.id, ...userSnap.data() };
         } else {
-          console.log('No such user!');
           return null;
         }
       } catch (error) {
-        console.error("Error fetching user: ", error);
         throw error;
       }
 }
 
-export {getUserById};
+const getAllUsers = async () => {
+    try {
+      const snapshot = await getDocs(ordersCollection);
+      const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return users;
+    } catch (error) {
+      console.error("Error fetching users: ", error);
+      throw error;
+    }
+};
+
+export {getUserById, getAllUsers};
