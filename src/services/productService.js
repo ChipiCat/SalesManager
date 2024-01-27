@@ -1,5 +1,5 @@
 import {firestore} from './firebase-config';
-import { collection, getDocs, getDoc , doc, addDoc, updateDoc} from "firebase/firestore"; 
+import { collection, getDocs, getDoc , doc, addDoc, updateDoc,deleteDoc} from "firebase/firestore"; 
 
 const productsCollection = collection(firestore, 'Producto');
 

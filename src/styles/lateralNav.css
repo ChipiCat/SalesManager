@@ -26,3 +26,15 @@
     height: 50px;
     color: var(--primary-color);
 }
+
+@media screen and (max-width: 768px){
+    .container-lateral-nav{
+        flex-direction: row;
+        width: 95%;
+        height: auto;
+        padding: 0px 10px;
+        margin: 0;
+        justify-content: center;
+    }
+    
+}

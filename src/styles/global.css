@@ -28,8 +28,9 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: start;
+
     gap: 32px;
-    align-items: stretch;
+    align-items: center;
     background-color: var(--white-color);
 }
 
@@ -109,8 +110,8 @@ small{
 
 @media screen and (max-width: 1024px){
     .container{
-        padding-right: 100px;
-        padding-left: 100px;
+        padding-right: 50px;
+        padding-left: 50px;
     }
 }
 
@@ -119,6 +120,19 @@ small{
         padding-right: 32px;
         padding-left: 32px;
     }   
+}
+
+@media screen and (max-width: 768px){
+    .container{
+        padding-right: 16px;
+        padding-left: 16px;
+    }   
+
+    .body-page{
+        flex-direction: column-reverse;
+        gap: 16px;
+    }
+    
 }
 
 @media screen and (max-width: 599px){
