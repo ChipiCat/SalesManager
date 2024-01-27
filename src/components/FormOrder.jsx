@@ -10,7 +10,10 @@ import { NumberInput } from "keep-react";
 import { validateInputNumber, validateText } from "../utils/Validator";
 import { uploadOrder } from "../services/orderService";
 import { useSelector } from "react-redux";
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
 
 
 const FormOrder = ({openForm, setOpenForm}) => {
@@ -19,11 +22,10 @@ const FormOrder = ({openForm, setOpenForm}) => {
     const [nameCient, setNameCient] = useState("");
     const [productList, setProductList] = useState([]); 
     const [totalPrice, setTotalPrice] = useState(0);
+    const [visitDate, setVisitDate] = useState(dayjs());
 
     const [openListProduct, setOpenListProduct] = useState(false);
-
     const [productsAvailable, setProductsAvailable] = useState([]);
-
     const [openQuantityDialog, setOpenQuantityDialog] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({});
     const [quantityCurrentProduct, setQuantityCurrentProduct] = useState(0);
@@ -137,7 +139,11 @@ const FormOrder = ({openForm, setOpenForm}) => {
                         console.log(product);
                         return {idProduct: product.product.id , quantity: product.quantity, state: "Pendiente"}
                     })
-                ]};
+                ],
+                visitDate: visitDate.toDate(),
+                observations: [],
+                economicState: "Por cancelar"
+                };
                 
             console.log("guardar", order);
 
@@ -181,6 +187,9 @@ const FormOrder = ({openForm, setOpenForm}) => {
                 <form className="form-product">
                     <TextField fullWidth onChange={(e) => setPlace(e.target.value)} label="Lugar de entrega" variant="standard" />
                     <TextField  fullWidth onChange={(e) => setNameCient(e.target.value)} label="Cliente(a)" variant="standard" />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker label={"Fecha de visita"} sx={{width:"100%"}} value={visitDate} onChange={(newValue) => {setVisitDate(newValue)}} />
+                    </LocalizationProvider>
                     <div className="title-section-add-product">
                         <h6>Productos</h6>
                         <Button onClick={() => setOpenListProduct(true)} variant="contained" color="primary">Agregar</Button>

@@ -13,6 +13,7 @@
     font-weight: 500;
     line-height: 24px;
     letter-spacing: 0.17px;
+    text-align: center;
 }
 
 .buttons-edit-container{
@@ -20,4 +21,36 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
+}
+
+.icon-button-alert{
+    width: 60%;
+    height: 60%;
+    color: orange;
+}
+
+.observations{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.observation-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.observation-buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    width: auto;
 }

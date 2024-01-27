@@ -85,15 +85,7 @@ const OrderList = (props) => {
                 <OrderItem 
                 key={order.id}
                 displayEditButtons={filterByUser}
-                orderId={order.id}
-                state={order.state} 
-                date={order.date} 
-                clientName={order.clientName}
-                place={order.place}
-                ProductList={order.ProductList}
-                totalPrice={order.totalPrice}
-                pendingPrice={order.pendingPrice}
-                idUserSeller={order.idUserSeller}
+                order={order}
                 />
             ))}
             <div className="pagination-component">
