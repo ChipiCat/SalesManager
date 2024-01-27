@@ -10,12 +10,9 @@ import "../styles/InventaryPage.css";
 const InventaryPage = () => {
     const [products, setProducts] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-
     const[nombre, setNombre] = useState("");
     const[precio, setPrecio] = useState(0);
     const[cantidad, setCantidad] = useState(0);
-
-    let ressetComponent = true;
 
     const fetchData = async () => {
         try{
@@ -32,6 +29,15 @@ const InventaryPage = () => {
     }, []);
 
     const saveProduct = () => {
+        if (precio <= 0 || cantidad < 0) {
+            console.error("El precio y la cantidad no pueden ser números negativos");
+            return;
+        }
+        if (nombre.trim() === "") {
+            console.error("El nombre no puede estar vacío");
+            return;
+        }
+
         const product = {
             name: nombre,
             price: precio,
@@ -44,9 +50,7 @@ const InventaryPage = () => {
         setNombre("");
         setPrecio(0);
         setCantidad(0);
-
         fetchData();
-        
     }
 
     return (
@@ -61,27 +65,25 @@ const InventaryPage = () => {
                     </div>
                     <TableProduct productList={products}/>
                 </div>
-
-                <Dialog 
-                    open={openModal}
-                    
-                >    
+                <Dialog open={openModal} >    
                     <DialogTitle> Nuevo Producto </DialogTitle>
                     <DialogContent>
                         <form onSubmit={saveProduct} className="form-product">
                             <TextField fullWidth variant="standard" label="Nombre" 
                                 value={nombre} onChange={(e) => setNombre(e.target.value)}/>
                             <TextField fullWidth type="number" variant="standard" label="Precio" 
-                                value={precio} onChange={(e) => setPrecio(e.target.value)}   />
+                                value={precio} onChange={(e) => {
+                                    const inputValue = parseFloat(e.target.value);
+                                    setPrecio(isNaN(inputValue) ? 0 : Math.max(0, inputValue));
+                                }} />
                             <TextField fullWidth type="number"  variant="standard" label="Cantidad"
-                                value={cantidad} onChange={(e) => setCantidad(e.target.value)}     />
+                                value={cantidad} onChange={(e) => setCantidad(Math.max(0, parseInt(e.target.value)))}    />
                             <div className="buttons-form">
                                 <Button variant="outlined" onClick={() => setOpenModal(false)} > Cancelar </Button>
                                 <Button onClick={saveProduct} variant="contained" color="primary">Guardar</Button>
                             </div>
                         </form>
                     </DialogContent>
-                   
                 </Dialog>
             </div>
         </div>
