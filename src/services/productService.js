@@ -1,5 +1,5 @@
 import {firestore} from './firebase-config';
-import { collection, getDocs, getDoc , doc, addDoc, updateDoc} from "firebase/firestore"; 
+import { collection, getDocs, getDoc , doc, addDoc, updateDoc,deleteDoc} from "firebase/firestore"; 
 
 const productsCollection = collection(firestore, 'Producto');
 
@@ -66,4 +66,35 @@ const verifyStockAvailable = async (idProduct, quantity) => {
   }
 }
 
-export {getProductById, getAllProducts, saveDataProduct, verifyStockAvailable, decrementStock};
+const updateProduct = async (productId, updatedProduct) => {
+  try {
+    const productRef = doc(firestore, 'Producto', productId);
+    const productSnap = await getDoc(productRef);
+
+    if (productSnap.exists()) {
+      await updateDoc(productRef, updatedProduct);
+      console.log(`Product with ID ${productId} updated successfully`);
+    } else {
+      console.log('No such product!');
+      
+    }
+  } catch (error) {
+    console.error("Error updating product: ", error);
+    throw error;
+
+  }
+}
+
+const deleteProduct = async (productId) => {
+  try {
+    const productRef = doc(firestore, 'Producto', productId);
+    await deleteDoc(productRef);
+    console.log(`Producto con ID ${productId} eliminado correctamente.`);
+  } catch (error) {
+    console.error("Error al eliminar el producto: ", error);
+    throw error;
+  }
+};
+
+
+export {getProductById, getAllProducts, saveDataProduct, updateProduct, decrementStock, verifyStockAvailable, deleteProduct};
