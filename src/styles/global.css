@@ -110,8 +110,12 @@ small{
 
 @media screen and (max-width: 1024px){
     .container{
-        padding-right: 50px;
-        padding-left: 50px;
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+
+    .body-page{
+        gap: 16px;
     }
 }
 
@@ -120,6 +124,10 @@ small{
         padding-right: 32px;
         padding-left: 32px;
     }   
+
+    .body-page{
+        gap: 0px;
+    }
 }
 
 @media screen and (max-width: 768px){
@@ -140,6 +148,32 @@ small{
         padding-right: 16px;
         padding-left: 16px;
     }   
+
+    h1 {
+        font-size: 2.488rem;
+    }
+
+    h2 {
+        font-size: 2.074rem;
+    }
+
+    h3 {
+        font-size: 1.728rem;
+    }
+
+    h4 {
+        font-size: 1.44rem;
+    }
+
+    h5 {
+        font-size: 1.2rem;
+    }
+
+    h6 {
+        font-size: 1rem;
+    }
+
+
     
 }
 

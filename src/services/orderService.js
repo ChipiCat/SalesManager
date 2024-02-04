@@ -1,5 +1,5 @@
 import {firestore} from './firebase-config';
-import { collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc, where, deleteDoc} from "firebase/firestore"; 
+import { setDoc, collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc, where, deleteDoc} from "firebase/firestore"; 
 import { decrementStock } from './productService';
 
 const ordersCollection = collection(firestore, 'Orders');
@@ -129,15 +129,81 @@ const deleteAllOrders = async () => {
 
 
 const deleteOrder = async (id) => {
+  id = String(id);
+  console.log('id: ', id);
   try {
     await deleteDoc(doc(ordersCollection, id));
+    console.log('Order deleted');
   } catch (error) {
     console.error("Error deleting order: ", error);
     throw error;
   }
 }
 
+const updateOrder = async (id, order) => {
+  try {
+    await setDoc(doc(ordersCollection, id), order);
+    console.log('Order updated');
+  } catch (error) {
+    console.error("Error updating order: ", error);
+    throw error;
+  }
+}
+
+const addObservationToOrder = async (id, observation) => {
+  try {
+    const orderRef = doc(ordersCollection, id);
+    const orderDoc = await getDoc(orderRef);
+    if (orderDoc.exists()) {
+      const order = orderDoc.data();
+      order.observations.push(observation);
+      await setDoc(orderRef, order);
+      console.log('Observation added to order');
+    } else {
+      console.error('Order not found');
+    }
+  } catch (error) {
+    console.error("Error adding observation to order: ", error);
+    throw error;
+  }
+}
+
+const deleteObservationFromOrder = async (id, observation) => {
+  try {
+    const orderRef = doc(ordersCollection, id);
+    const orderDoc = await getDoc(orderRef);
+    if (orderDoc.exists()) {
+      const order = orderDoc.data();
+      order.observations = order.observations.filter(obs => obs !== observation);
+      await setDoc(orderRef, order);
+      console.log('Observation deleted from order');
+    } else {
+      console.error('Order not found');
+    }
+  } catch (error) {
+    console.error("Error deleting observation from order: ", error);
+    throw error;
+  }
+}
+
+const getObservationsByOrder = async (id) => {
+  try {
+    const orderRef = doc(ordersCollection, id);
+    const orderDoc = await getDoc(orderRef);
+    if (orderDoc.exists()) {
+      const order = orderDoc.data();
+      return order.observations;
+    } else {
+      console.error('Order not found');
+      return [];
+    }
+  } catch (error) {
+    console.error("Error getting observations by order: ", error);
+    throw error;
+  }
+}
 
 
 export { getAllOrders, getPage, getNumberOfOrders, uploadOrder
-  , getPageByUser, getNumberOfOrdersByUser, deleteAllOrders, deleteOrder};
+  , getPageByUser, getNumberOfOrdersByUser, deleteAllOrders, deleteOrder
+  , updateOrder, addObservationToOrder, getObservationsByOrder, deleteObservationFromOrder};
