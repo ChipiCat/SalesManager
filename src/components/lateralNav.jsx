@@ -26,7 +26,7 @@ const LateralNav = () => {
             <Button onClick={() => navigate('/estadisticas')} variant="text" sx={{width:"80px", height:"80px"}}>
                 <div className="box-button-nav">
                     <TbChartInfographic className="icon-nav"/>
-                    <small>Estadisticas</small>
+                    <small>Visitas</small>
                 </div>
             </Button>
         </div>

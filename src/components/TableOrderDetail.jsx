@@ -8,14 +8,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState, } from "react";
-import { getProductById, getAllProducts} from "../services/productService";
+import { getProductById} from "../services/productService";
 
 
 
 const TableOrderDetail = (props) => {
     const productList = props.productList;
-    const totalPrice = props.totalPrice;
-    const pendingPrice = props.pendingPrice;
+    
     const [products, setProducts] = useState({});
 
     useEffect(() => {
@@ -37,11 +36,11 @@ const TableOrderDetail = (props) => {
     
     return (
         <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 300 }} aria-label="simple table">
+      <Table sx={{ minWidth: "none" }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Producto</TableCell>
-            <TableCell align="right">Precio por unidad</TableCell>
+            <TableCell  align="right">P/unidad</TableCell>
             <TableCell align="right">Cantidad</TableCell>
             <TableCell align="right">Subtotal</TableCell>
             <TableCell align="right">Estado)</TableCell>

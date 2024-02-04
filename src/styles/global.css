@@ -22,6 +22,7 @@ body{
 }
 
 .body-page{
+    position: relative;
     flex: 1;
     padding-top: 10px;
     padding-bottom: 10px;

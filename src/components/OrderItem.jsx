@@ -9,6 +9,13 @@ import TableOrderDetail from "./TableOrderDetail";
 import { MdDelete } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { IoIosAlert } from "react-icons/io";
+import { MdPlace } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
+import { GiArchiveRegister } from "react-icons/gi";
+import { MdUpdate } from "react-icons/md";
+import { FaUserTie } from "react-icons/fa6";
+import { FaBook } from "react-icons/fa";
+import { MdAttachMoney } from "react-icons/md";
 
 import "../styles/OrderItem.css";
 import "../styles/global.css";
@@ -61,7 +68,7 @@ const OrderItem = ({displayEditButtons, order}) => {
 
     return (
         <>
-            <Accordion style={{width: '100%'}}>
+            <Accordion style={{width: '100%', backgroundColor: "#F2F2F2"}}>
                 <AccordionSummary
                     
                     aria-controls="panel1-content"
@@ -69,17 +76,22 @@ const OrderItem = ({displayEditButtons, order}) => {
                     <div className="order-text-item">
                         <div className="box-details">
                             <div className="container-text-details"> 
-                                <h6>{place}</h6> 
-                                <h6>{clientName}</h6>
-                                <h6 className="right-value">{day}/{month}/{year}</h6> 
+                                <h6><MdPlace /> {place}</h6> 
+                                <h6><FaUser/> {clientName}</h6>
                             </div>
                             <div className="container-text-details">
-                                <h6>{transformDateToString(visitDate)}</h6> 
-                                <h6>{user.name}</h6>
-                                <h6 className="right-value">{state}</h6>
+                                <h6 className="right-value"> <GiArchiveRegister/> {day}/{month}/{year}</h6> 
+                            
+                            
+                                <h6><MdUpdate/> {transformDateToString(visitDate)}</h6> 
+                                <h6><FaUserTie/> {user.name}</h6>
+                                
                                 
                             </div>
-                            <h6>{pendingPrice} Bs</h6>
+                            <div className="container-text-details">
+                                <h6 className="right-value"> <FaBook/> {state}</h6>
+                                <h6> <MdAttachMoney/> {pendingPrice} Bs</h6>
+                            </div>
                             <div className="container-icons-item-details">
                             {observations.length > 0 ? <IoIosAlert className="icon-button-alert"/> : null}
 
