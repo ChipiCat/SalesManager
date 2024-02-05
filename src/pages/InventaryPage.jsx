@@ -71,8 +71,19 @@ const InventaryPage = () => {
                     <DialogTitle> Nuevo Producto </DialogTitle>
                     <DialogContent>
                         <form onSubmit={saveProduct} className="form-product">
-                            <TextField fullWidth variant="standard" label="Nombre" 
-                                value={nombre} onChange={(e) => setNombre(e.target.value)}/>
+                        <TextField
+  fullWidth
+  variant="standard"
+  label="Nombre"
+  value={nombre}
+  onChange={(e) => {
+    const trimmedValue = e.target.value.slice(0, 50);
+    if (trimmedValue.length <= 50) {
+      setNombre(trimmedValue);
+    }
+  }}
+/>
+
                             <TextField fullWidth type="number" variant="standard" label="Precio (Bs)" 
                                 value={precio} onChange={(e) => {
                                     const inputValue = parseFloat(e.target.value);
