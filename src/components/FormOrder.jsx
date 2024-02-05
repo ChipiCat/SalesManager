@@ -132,7 +132,7 @@ const FormOrder = ({openForm, setOpenForm}) => {
                 idUserSeller: idUser,
                 pendingPrice: totalPrice,
                 place: place,
-                state: 'Pendiente',
+                state: 'Incompleto',
                 totalPrice: totalPrice,
                 ProductList: [
                     ...productList.map((product) => {

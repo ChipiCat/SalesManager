@@ -23,6 +23,8 @@ import { getUserById } from "../services/userService";
 import { Button, Dialog, DialogTitle, IconButton, List } from "@mui/material";
 import DialogDeleteOrder from "./OrderItem/DialogDeleteOrder";
 import ObservacionesSection from "./OrderItem/ObservationsSection";
+import { Update } from "@mui/icons-material";
+import UpdateStateOrderItem from "./OrderItem/UpdateStateOrderItem";
 
 const OrderItem = ({displayEditButtons, order}) => {
     const props = order;
@@ -47,6 +49,7 @@ const OrderItem = ({displayEditButtons, order}) => {
 
     const [user, setUser] = useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
 
 
@@ -56,7 +59,7 @@ const OrderItem = ({displayEditButtons, order}) => {
             setUser(data);
         };
         fetchData();
-    }, []);
+    }, [order]);
 
     const transformDateToString = (date) =>{
         let dateObject = date.toDate(); // convierte el timestamp de Firebase en una instancia de Date
@@ -105,7 +108,7 @@ const OrderItem = ({displayEditButtons, order}) => {
                                     </IconButton>
                                     <IconButton className="icon-button-edit" onClick={(event) => {
                                                                                     event.stopPropagation();
-                                                                                    console.log("abriendo delete dialog");
+                                                                                    setOpenUpdateDialog(true);
                                                                                 }}>
                                         <TbEdit />
                                     </IconButton>
@@ -133,7 +136,7 @@ const OrderItem = ({displayEditButtons, order}) => {
                 </Accordion>
 
                 <DialogDeleteOrder order={order} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog}/>
-
+                <UpdateStateOrderItem order={order} openUpdateDialog={openUpdateDialog} setOpenUpdateDialog={setOpenUpdateDialog}/>
         </>
     );
 }

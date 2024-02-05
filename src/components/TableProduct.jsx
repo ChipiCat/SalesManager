@@ -13,14 +13,17 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { TextField, Button } from "@mui/material";
-import { deleteProduct, getAllProducts } from "../services/productService"; 
+import { deleteProduct, getAllProducts, updateProduct } from "../services/productService"; 
 import "../styles/global.css";
 import "../styles/InventaryPage.css";
 
 const TableProduct = (props) => {
   const [productList, setProductList] = useState(props.productList);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState({name: "", price: 0, stock: 0});
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  
 
   const handleEdit = (productId) => {
     setSelectedProduct(productId);
@@ -29,7 +32,7 @@ const TableProduct = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [props.productList]);
 
   const fetchData = async () => {
     try {
@@ -40,25 +43,39 @@ const TableProduct = (props) => {
     }
   };
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (product) => {
+    
     try {
-      await deleteProduct(productId);
-      console.log(`Producto con ID ${productId} eliminado correctamente.`);
+      await deleteProduct(product.id);
+      console.log(`Producto con ID ${product.id} eliminado correctamente.`);
       fetchData();
     } catch (error) {
       console.error("Error al eliminar el producto: ", error);
     }
+    setOpenDeleteDialog(false);
+
   };
 
-  const handleCloseEditDialog = () => {
+  
+
+  const handleSaveEdit = async () => {
+    
+    await updateProduct(selectedProduct.id, selectedProduct);
+    fetchData();
     setEditDialogOpen(false);
-    setSelectedProduct(null);
   };
 
-  const handleSaveEdit = () => {
-    setEditDialogOpen(false);
-    setSelectedProduct(null);
-  };
+  const setNameSelectedProduct = (name) => {
+    setSelectedProduct({...selectedProduct, name: name});
+  }
+
+  const setPriceSelectedProduct = (price) => {
+    setSelectedProduct({...selectedProduct, price: price});
+  }
+
+  const setStockSelectedProduct = (stock) => {
+    setSelectedProduct({...selectedProduct, stock: stock});
+  }
 
   return (
     <>
@@ -81,10 +98,10 @@ const TableProduct = (props) => {
               <TableCell> {product.price} Bs</TableCell>
               <TableCell> {product.stock} </TableCell>
               <TableCell>
-                <IconButton aria-label="edit" onClick={() => handleEdit(product.id)} style={{ color: '#FFAE35' }}>
+                <IconButton aria-label="edit" onClick={() => {setSelectedProduct(product); setEditDialogOpen(true)}} style={{ color: '#FFAE35' }}>
                   <EditIcon />
                 </IconButton>
-                <IconButton aria-label="delete" onClick={() => handleDelete(product.id)} style={{ color: '#FFAE35' }}>
+                <IconButton aria-label="delete" onClick={() => {setSelectedProduct(product); setOpenDeleteDialog(true);}} style={{ color: '#FFAE35' }}>
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
@@ -93,26 +110,42 @@ const TableProduct = (props) => {
         </TableBody>
       </Table>
     </TableContainer>
-    <Dialog open={editDialogOpen} onClose={handleCloseEditDialog}>
+    <Dialog fullWidth open={editDialogOpen}>
         <DialogTitle>Editar Producto</DialogTitle>
         <DialogContent>
           {selectedProduct && (
             <form className="form-product">
-              <TextField fullWidth variant="standard" label="Nombre" value={selectedProduct.name} />
-              <TextField fullWidth type="number" variant="standard" label="Precio" value={selectedProduct.price} />
-              <TextField fullWidth type="number" variant="standard" label="Cantidad" value={selectedProduct.stock} />
+              <TextField fullWidth variant="standard" label="Nombre" value={selectedProduct.name} onChange={(e) => setNameSelectedProduct(e.target.value)}/>
+              <TextField fullWidth type="number" variant="standard" label="Precio(Bs)" value={selectedProduct.price} onChange={(e) => setPriceSelectedProduct(e.target.value)} />
+              <TextField fullWidth type="number" variant="standard" label="Cantidad" value={selectedProduct.stock} onChange={(e) => setStockSelectedProduct(e.target.value)} />
               <div className="buttons-form">
-                <Button variant="outlined" onClick={handleCloseEditDialog}>
+                <Button variant="outlined" onClick={() => setEditDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button variant="contained" color="primary" onClick={handleSaveEdit}>
+                <Button variant="contained" color="primary" onClick={() => handleSaveEdit()}>
                   Guardar
                 </Button>
               </div>
             </form>
           )}
         </DialogContent>
-      </Dialog>
+    </Dialog>
+
+    <Dialog open={openDeleteDialog} >
+        <DialogTitle>Eliminar {selectedProduct.name} </DialogTitle>
+        <DialogContent>
+          <p>¿Está seguro que desea eliminar este producto?</p>
+          <div className="buttons-form">
+            <Button variant="outlined" onClick={() => setOpenDeleteDialog(false)}>
+              Cancelar
+            </Button>
+            <Button variant="contained" color="primary" onClick={() => handleDelete(selectedProduct)}>
+              Eliminar
+            </Button>
+          </div>
+        </DialogContent>
+    </Dialog>
+
     </>
   );
 }

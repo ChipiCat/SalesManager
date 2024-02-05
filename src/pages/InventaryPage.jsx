@@ -13,11 +13,13 @@ const InventaryPage = () => {
     const[nombre, setNombre] = useState("");
     const[precio, setPrecio] = useState(0);
     const[cantidad, setCantidad] = useState(0);
+    const[forceUpdate, setForceUpdate] = useState(false);
 
     const fetchData = async () => {
         try{
             const data = await getAllProducts();
             setProducts(data);
+            console.log("PRoductos sincronizados");
         }
         catch(error){
             console.log(error);
@@ -26,9 +28,9 @@ const InventaryPage = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [forceUpdate]);
 
-    const saveProduct = () => {
+    const saveProduct = async() => {
         if (precio <= 0 || cantidad < 0) {
             console.error("El precio y la cantidad no pueden ser números negativos");
             return;
@@ -45,12 +47,12 @@ const InventaryPage = () => {
             currency: "Bs"
         }
 
-        saveDataProduct(product);
+        await saveDataProduct(product);
         setOpenModal(false);
         setNombre("");
         setPrecio(0);
         setCantidad(0);
-        fetchData();
+        setForceUpdate(!forceUpdate)
     }
 
     return (
@@ -65,13 +67,13 @@ const InventaryPage = () => {
                     </div>
                     <TableProduct productList={products}/>
                 </div>
-                <Dialog open={openModal} >    
+                <Dialog open={openModal} fullWidth >    
                     <DialogTitle> Nuevo Producto </DialogTitle>
                     <DialogContent>
                         <form onSubmit={saveProduct} className="form-product">
                             <TextField fullWidth variant="standard" label="Nombre" 
                                 value={nombre} onChange={(e) => setNombre(e.target.value)}/>
-                            <TextField fullWidth type="number" variant="standard" label="Precio" 
+                            <TextField fullWidth type="number" variant="standard" label="Precio (Bs)" 
                                 value={precio} onChange={(e) => {
                                     const inputValue = parseFloat(e.target.value);
                                     setPrecio(isNaN(inputValue) ? 0 : Math.max(0, inputValue));
