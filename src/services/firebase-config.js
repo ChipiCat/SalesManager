@@ -3,14 +3,15 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAc8191Qvi6RkPI4sH_N9DgR8vRv-0hzvk",
-  authDomain: "salesmanager-68efb.firebaseapp.com",
-  projectId: "salesmanager-68efb",
-  storageBucket: "salesmanager-68efb.appspot.com",
-  messagingSenderId: "61865024058",
-  appId: "1:61865024058:web:95b4bf8202f6fe474bb303",
-  measurementId: "G-H0GMMWBDDC"
+  apiKey: "AIzaSyC7Q4KC4gvSZX5XjWELjme8QZePCBTjbus",
+  authDomain: "salesmanager-71337.firebaseapp.com",
+  projectId: "salesmanager-71337",
+  storageBucket: "salesmanager-71337.appspot.com",
+  messagingSenderId: "892942091450",
+  appId: "1:892942091450:web:984caf28479e92a8f62e83",
+  measurementId: "G-X4QHXC3EWJ"
 };
+
 
 const firebaseApp = initializeApp(firebaseConfig);
 const analytics = getAnalytics(firebaseApp);
