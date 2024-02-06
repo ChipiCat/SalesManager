@@ -87,7 +87,7 @@ const OrderItem = ({displayEditButtons, order}) => {
                             
                             
                                 <h6><MdUpdate/> {transformDateToString(visitDate)}</h6> 
-                                <h6><FaUserTie/> {user.name}</h6>
+                                <h6><FaUserTie/> {user && user.name}</h6>
                                 
                                 
                             </div>
