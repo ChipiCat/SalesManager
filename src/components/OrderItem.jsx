@@ -25,10 +25,11 @@ import DialogDeleteOrder from "./OrderItem/DialogDeleteOrder";
 import ObservacionesSection from "./OrderItem/ObservationsSection";
 import { Update } from "@mui/icons-material";
 import UpdateStateOrderItem from "./OrderItem/UpdateStateOrderItem";
+import { updateStateOrder } from "../services/orderService";
 
 const OrderItem = ({displayEditButtons, order}) => {
     const props = order;
-    const orderId = props.idOrder;
+   
     
     const [state, setState] = useState(props.state);
     const [date, setDate] = useState(props.date);
@@ -51,6 +52,7 @@ const OrderItem = ({displayEditButtons, order}) => {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
+    const [products, setProducts] = useState({});
 
 
     useEffect(() => {
@@ -59,7 +61,22 @@ const OrderItem = ({displayEditButtons, order}) => {
             setUser(data);
         };
         fetchData();
+        console.log("Cambios en order detectados");
+
+       
     }, [order]);
+
+    useEffect(() => {
+        let newState = "Completo";
+        for (let product of ProductList) {
+            if (product.state !== "Entregado") {
+                newState = "Incompleto";
+                break;
+            }
+        }
+        setState(newState);
+        updateStateOrder(order.id, newState);
+    }, [ProductList]);
 
     const transformDateToString = (date) =>{
         let dateObject = date.toDate(); // convierte el timestamp de Firebase en una instancia de Date
@@ -123,8 +140,8 @@ const OrderItem = ({displayEditButtons, order}) => {
                 <AccordionDetails>
                         <TableOrderDetail
                              productList={ProductList} 
-                             totalPrice={totalPrice}
-                            pendingPrice={pendingPrice}
+                             products={products}
+                             setProducts={setProducts}
                             
                              />
                         <div className="text-price-detail">
@@ -136,7 +153,7 @@ const OrderItem = ({displayEditButtons, order}) => {
                 </Accordion>
 
                 <DialogDeleteOrder order={order} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog}/>
-                <UpdateStateOrderItem order={order} openUpdateDialog={openUpdateDialog} setOpenUpdateDialog={setOpenUpdateDialog}/>
+                <UpdateStateOrderItem orderId={order.id} ProductList={ProductList} setProductList={setProductList} products={products} openUpdateDialog={openUpdateDialog} setOpenUpdateDialog={setOpenUpdateDialog}/>
         </>
     );
 }

@@ -1,5 +1,5 @@
 import {firestore} from './firebase-config';
-import { setDoc, collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc, where, deleteDoc} from "firebase/firestore"; 
+import { updateDoc, setDoc, collection, getDocs, getDoc, addDoc, query, limit, startAfter, orderBy, doc, where, deleteDoc} from "firebase/firestore"; 
 import { decrementStock } from './productService';
 
 const ordersCollection = collection(firestore, 'Orders');
@@ -204,6 +204,42 @@ const getObservationsByOrder = async (id) => {
 }
 
 
+
+const updateProductListStateOfOrder = async (id, productList) => {
+  console.log('Product list to insert ', productList );
+  try {
+    const orderRef = doc(ordersCollection, id);
+    const orderDoc = await getDoc(orderRef);
+    if (orderDoc.exists()) {
+      await updateDoc(orderRef, { ProductList: productList });
+      console.log('Product list state updated');
+    } else {
+      console.error('Order not found');
+    }
+  } catch (error) {
+    console.error("Error updating product list state of order: ", error);
+    throw error;
+  }
+}
+
+const updateStateOrder = async (id, state) => {
+  try {
+    const orderRef = doc(ordersCollection, id);
+    const orderDoc = await getDoc(orderRef);
+    if (orderDoc.exists()) {
+      await updateDoc(orderRef, { state: state });
+      console.log('State of order updated');
+    } else {
+      console.error('Order not found');
+    }
+  } catch (error) {
+    console.error("Error updating state of order: ", error);
+    throw error;
+  }
+}
+
+
 export { getAllOrders, getPage, getNumberOfOrders, uploadOrder
   , getPageByUser, getNumberOfOrdersByUser, deleteAllOrders, deleteOrder
-  , updateOrder, addObservationToOrder, getObservationsByOrder, deleteObservationFromOrder};
+  , updateOrder, addObservationToOrder, getObservationsByOrder, deleteObservationFromOrder
+  , updateProductListStateOfOrder, updateStateOrder};
