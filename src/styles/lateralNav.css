@@ -27,6 +27,11 @@
     color: var(--primary-color);
 }
 
+.alert-icon {
+    color: red; 
+    margin-left: 60px; 
+  }
+
 @media screen and (max-width: 899px){
     .container-lateral-nav{
         display: none;

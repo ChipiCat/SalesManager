@@ -11,11 +11,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { FiInbox } from "react-icons/fi";
 import { TbChartInfographic } from "react-icons/tb";
 import { CiBoxes } from "react-icons/ci";
+import { MdError } from "react-icons/md"; 
+import { useSelector } from 'react-redux'; 
 import { useNavigate } from 'react-router-dom';
 
 export default function SwipeableTemporaryDrawer() {
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const hasNegativeQuantityAlert = useSelector((state) => state.alert.showNegativeQuantityAlert);
 
   const toggleDrawer = (open) => () => {
     setIsDrawerOpen(open);
@@ -50,6 +53,7 @@ export default function SwipeableTemporaryDrawer() {
           <ListItemButton onClick={() => handleMenuItemClick('/inventario')}>
             <ListItemIcon>
               <CiBoxes style={{ color: 'orange', fontSize: 30 }}/>
+              {hasNegativeQuantityAlert && <MdError style={{ color: 'red', fontSize: 15 }} />}
             </ListItemIcon>
             <ListItemText primary="Inventario" />
           </ListItemButton>
