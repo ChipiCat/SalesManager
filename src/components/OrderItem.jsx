@@ -101,12 +101,8 @@ const OrderItem = ({displayEditButtons, order}) => {
                             </div>
                             <div className="container-text-details">
                                 <h6 className="right-value"> <GiArchiveRegister/> {day}/{month}/{year}</h6> 
-                            
-                            
                                 <h6><MdUpdate/> {transformDateToString(visitDate)}</h6> 
-                                <h6><FaUserTie/> {user.name}</h6>
-                                
-                                
+                                <h6><FaUserTie/> {user && user.name}</h6>
                             </div>
                             <div className="container-text-details">
                                 <h6 className="right-value"> <FaBook/> {state}</h6>

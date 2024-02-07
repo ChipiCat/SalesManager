@@ -1,7 +1,8 @@
+// InventaryPage.jsx
 import React, { useEffect, useState } from "react";
 import NavbarComponent from "../components/NavBarComponent";
 import LateralNav from "../components/lateralNav";
-import { Button, Modal, Box, TextField, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import { Button, TextField, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import TableProduct from "../components/TableProduct";
 import { getAllProducts, saveDataProduct } from "../services/productService";
 import "../styles/global.css";
@@ -19,9 +20,8 @@ const InventaryPage = () => {
         try {
             const data = await getAllProducts();
             setProducts(data);
-            console.log("PRoductos sincronizados");
-        }
-        catch (error) {
+            console.log("Productos sincronizados");
+        } catch (error) {
             console.log(error);
         }
     };
@@ -45,33 +45,32 @@ const InventaryPage = () => {
             price: precio,
             stock: cantidad,
             currency: "Bs"
-        }
+        };
 
         await saveDataProduct(product);
         setOpenModal(false);
         setNombre("");
         setPrecio(0);
         setCantidad(0);
-        setForceUpdate(!forceUpdate)
-    }
+        setForceUpdate(!forceUpdate);
+    };
 
     return (
         <div className="page">
-            <NavbarComponent />
-            <div className="body-page">
-                <LateralNav />
-                <div className="content-page container">
-                    <div className="head-content-tab">
-                        <h2>Inventario</h2>
-                        <Button onClick={() => setOpenModal(true)} variant="contained" color="primary">Nuevo Producto</Button>
-                    </div>
-                    <TableProduct productList={products} />
+        <NavbarComponent />
+        <div className="body-page">
+            <LateralNav />
+            <div className="content-page container">
+                <div className="head-content-tab">
+                    <h2>Inventario</h2>
+                    <Button onClick={() => setOpenModal(true)} variant="contained" color="primary">Nuevo Producto</Button>
                 </div>
+                <TableProduct productList={products} />
                 <Dialog open={openModal} fullWidth >
                     <DialogTitle> Nuevo Producto </DialogTitle>
                     <DialogContent>
                         <form onSubmit={saveProduct} className="form-product">
-                            <TextField fullWidth variant="standard" label="Nombre" value={nombre} onChange={(e) => {const trimmedValue = e.target.value.slice(0, 50); if (trimmedValue.length <= 50) {setNombre(trimmedValue);}}}/>
+                            <TextField fullWidth variant="standard" label="Nombre" value={nombre} onChange={(e) => { const trimmedValue = e.target.value.slice(0, 50); if (trimmedValue.length <= 50) { setNombre(trimmedValue); } }} />
                             <TextField fullWidth type="number" variant="standard" label="Precio (Bs)"
                                 value={precio} onChange={(e) => {
                                     const inputValue = parseFloat(e.target.value);
@@ -88,7 +87,8 @@ const InventaryPage = () => {
                 </Dialog>
             </div>
         </div>
+    </div>
     );
-}
+};
 
 export default InventaryPage;
