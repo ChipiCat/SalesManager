@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux'; // Importar useDispatch y useSelector
+import { setShowNegativeQuantityAlert } from "../redux/alertSlice"; // Importar la acción para establecer la alerta
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,13 +24,7 @@ const TableProduct = (props) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState({name: "", price: 0, stock: 0});
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-  
-
-  const handleEdit = (productId) => {
-    setSelectedProduct(productId);
-    setEditDialogOpen(true);
-  };
+  const dispatch = useDispatch(); // Obtener la función dispatch de Redux
 
   useEffect(() => {
     fetchData();
@@ -38,13 +34,18 @@ const TableProduct = (props) => {
     try {
       const data = await getAllProducts();
       setProductList(data);
+
+      // Verificar si hay cantidades negativas y establecer la alerta en Redux
+      const hasNegativeQuantity = data.some(product => product.stock < 0);
+
+      dispatch(setShowNegativeQuantityAlert(hasNegativeQuantity));
+      console.log(hasNegativeQuantity);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleDelete = async (product) => {
-    
     try {
       await deleteProduct(product.id);
       console.log(`Producto con ID ${product.id} eliminado correctamente.`);
@@ -53,13 +54,9 @@ const TableProduct = (props) => {
       console.error("Error al eliminar el producto: ", error);
     }
     setOpenDeleteDialog(false);
-
   };
 
-  
-
   const handleSaveEdit = async () => {
-    
     await updateProduct(selectedProduct.id, selectedProduct);
     fetchData();
     setEditDialogOpen(false);
@@ -90,8 +87,14 @@ const TableProduct = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {productList ? productList.map((product) => (
-            <TableRow key={product.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+          {productList && productList.map((product) => (
+            <TableRow 
+              key={product.id} 
+              sx={{
+                '&:last-child td, &:last-child th': { border: 0 },
+                backgroundColor: product.stock < 0 ? 'rgba(255, 0, 0, 0.2)' : 'inherit' // Aplicar fondo rojo si la cantidad es negativa
+              }}
+            >
               <TableCell component="th" scope="row">
                 {product.name}
               </TableCell>
@@ -106,7 +109,7 @@ const TableProduct = (props) => {
                 </IconButton>
               </TableCell>
             </TableRow>
-          )) : null}
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

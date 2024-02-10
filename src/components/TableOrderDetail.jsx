@@ -12,10 +12,8 @@ import { getProductById} from "../services/productService";
 
 
 
-const TableOrderDetail = (props) => {
-    const productList = props.productList;
-    
-    const [products, setProducts] = useState({});
+const TableOrderDetail = ({ productList,products, setProducts }) => {
+  
 
     useEffect(() => {
         const fetchProductNames = async () => {
